@@ -37,9 +37,13 @@ async function run() {
 
     app.get("/toys/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await toysCollection.findOne(query);
-      res.send(result);
+      try {
+        const query = { _id: ObjectId(id) };
+        const result = await toysCollection.findOne(query);
+        res.send(result);
+      } catch (error) {
+        res.status(400).send("Invalid ID");
+      }
     });
 
     app.get("/toys-each", async (req, res) => {
