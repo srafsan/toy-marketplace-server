@@ -39,6 +39,17 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await toysCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.get("/toys-each", async (req, res) => {
+      let query = {};
+
+      if (req.query?.sellerEmail) {
+        query = { sellerEmail: req.query.sellerEmail };
+      }
+
+      const result = await toysCollection.find(query).toArray();
 
       res.send(result);
     });
