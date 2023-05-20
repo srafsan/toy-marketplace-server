@@ -38,7 +38,7 @@ async function run() {
     app.get("/toys/:id", async (req, res) => {
       const id = req.params.id;
       try {
-        const query = { _id: ObjectId(id) };
+        const query = { _id: new ObjectId(id) };
         const result = await toysCollection.findOne(query);
         res.send(result);
       } catch (error) {
@@ -53,7 +53,14 @@ async function run() {
         query = { sellerEmail: req.query.sellerEmail };
       }
 
-      const result = await toysCollection.find(query).toArray();
+      let sortQuery = {};
+
+      if (req.query?.sort) {
+        const sortDirection = req.query.sort === "desc" ? 1 : -1;
+        sortQuery = { price: sortDirection };
+      }
+
+      const result = await toysCollection.find(query).sort(sortQuery).toArray();
 
       res.send(result);
     });
