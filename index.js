@@ -27,6 +27,7 @@ async function run() {
     await client.connect();
 
     const toysCollection = client.db("ToysDB").collection("toys");
+    const reviewsCollection = client.db("ToysDB").collection("reviews");
 
     app.get("/toys", async (req, res) => {
       const cursor = toysCollection.find({});
@@ -98,6 +99,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await toysCollection.deleteOne(query);
+
+      res.send(result);
+    });
+
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewsCollection.find({});
+      const result = await cursor.toArray();
 
       res.send(result);
     });
