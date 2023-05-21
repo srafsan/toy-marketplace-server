@@ -66,6 +66,18 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/toys-category", async (req, res) => {
+      let query = {};
+
+      if (req.query?.subcategory) {
+        query = { subcategory: req.query.subcategory };
+      }
+
+      const result = await toysCollection.find(query).toArray();
+
+      res.send(result);
+    });
+
     app.post("/toys", async (req, res) => {
       const toy = req.body;
       const result = await toysCollection.insertOne(toy);
@@ -75,18 +87,18 @@ async function run() {
 
     app.put("/toys/:id", async (req, res) => {
       const id = req.params.id;
-      const updatedCoffee = req.body;
+      const updatedToy = req.body;
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
       const coffee = {
         $set: {
-          name: updatedCoffee.name,
-          quantity: updatedCoffee.availableQuantity,
-          sellerName: updatedCoffee.sellerName,
-          sellerEmail: updatedCoffee.sellerEmail,
-          pictureURL: updatedCoffee.pictureURL,
-          subcategory: updatedCoffee.subcategory,
-          price: updatedCoffee.price,
+          name: updatedToy.name,
+          quantity: updatedToy.availableQuantity,
+          sellerName: updatedToy.sellerName,
+          sellerEmail: updatedToy.sellerEmail,
+          pictureURL: updatedToy.pictureURL,
+          subcategory: updatedToy.subcategory,
+          price: updatedToy.price,
         },
       };
 
